@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-const DUMBBELL_ASSET = '/assets/image.png';
+const DUMBBELL_ASSET = 'https://res.cloudinary.com/iq7pkdiu/image/upload/v1787528396/13474016-f266-47e5-90c9-223e805a0b6c.png';
 const MINIMUM_DISPLAY_MS = 450;
-const FILL_DURATION_MS = 900;
-const HOLD_DURATION_MS = 240;
+const FILL_DURATION_MS = 1100;
+const HOLD_DURATION_MS = 260;
 const FADE_DURATION_MS = 600;
 
 function waitForImage(src: string): Promise<void> {
@@ -42,7 +42,7 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
 
     Promise.all([pageReady, minimumDisplay, waitForImage(DUMBBELL_ASSET)]).then(() => {
       if (!isMounted) return;
-      setProgress(100);
+      requestAnimationFrame(() => setProgress(100));
 
       fillTimer = setTimeout(() => {
         if (!isMounted) return;
@@ -64,9 +64,9 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   return (
     <div className={`loading-screen ${isFading ? 'is-fading' : ''}`} aria-hidden="true">
       <div className="loading-dumbbell" role="presentation">
-        <img className="loading-dumbbell-base" src={DUMBBELL_ASSET} alt="" />
-        <div className="loading-dumbbell-progress" style={{ clipPath: `inset(0 ${100 - progress}% 0 0)` }}>
-          <img src={DUMBBELL_ASSET} alt="" />
+        <img src={DUMBBELL_ASSET} alt="" />
+        <div className="loading-handle-track">
+          <div className="loading-handle-fill" style={{ transform: `scaleX(${progress / 100})` }} />
         </div>
       </div>
     </div>

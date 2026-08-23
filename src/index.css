@@ -91,13 +91,12 @@ h1 em { color: #8a9b55; font-style: normal; }
 .site-page.is-loading .hero-fade { opacity: 0 !important; transform: translateY(10px) !important; animation: none !important; }
 .site-page.is-loading .environment-hero h2 { opacity: 0 !important; transform: translateY(18px) !important; animation: none !important; }
 
-.loading-screen { position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at center, #171816 0%, #0c0d0b 38%, #050605 100%); opacity: 1; pointer-events: auto; transition: opacity .6s cubic-bezier(.22, .61, .36, 1); }
+.loading-screen { position: fixed; z-index: 1000; inset: 0; width: 100vw; height: 100vh; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at center, #10110f 0%, #050605 42%, #000 100%); opacity: 1; pointer-events: auto; transition: opacity .6s cubic-bezier(.22, .61, .36, 1); }
 .loading-screen.is-fading { opacity: 0; pointer-events: none; }
-.loading-dumbbell { position: relative; width: min(90vw, 820px); aspect-ratio: 3 / 2; overflow: hidden; }
-.loading-dumbbell img { position: absolute; inset: 0; display: block; width: clamp(560px, 58vw, 820px); max-width: none; height: auto; margin: auto; object-fit: contain; }
-.loading-dumbbell-base { filter: grayscale(1) brightness(.34) contrast(1.08); }
-.loading-dumbbell-progress { position: absolute; inset: 0; overflow: hidden; filter: drop-shadow(0 0 8px rgba(138, 155, 85, .16)); transition: clip-path .9s cubic-bezier(.22, .61, .36, 1); }
-.loading-dumbbell-progress img { filter: saturate(1.08) brightness(1.02); }
+.loading-dumbbell { position: relative; width: clamp(220px, 32vw, 380px); aspect-ratio: 3 / 2; flex: 0 0 auto; }
+.loading-dumbbell > img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; }
+.loading-handle-track { position: absolute; top: 43.25%; left: 31.25%; width: 40.1%; height: 14.3%; overflow: hidden; border-radius: 4px; background: rgba(4, 6, 5, .78); }
+.loading-handle-fill { width: 100%; height: 100%; transform: scaleX(0); transform-origin: left center; background: linear-gradient(90deg, #778b48 0%, #8a9b55 72%, #98aa62 100%); box-shadow: 0 0 10px rgba(138, 155, 85, .22); transition: transform 1.1s cubic-bezier(.22, .61, .36, 1); }
 #giới-thiệu, #thay-đổi, #môi-trường-tập-luyện, #bat-dau-hanh-trinh, #personal-training, #dong-hanh-cung-ban, #địa-chỉ { scroll-margin-top: 104px; }
 .floating-contact { position: fixed; z-index: 110; right: clamp(12px, 2vw, 28px); bottom: clamp(20px, 4vw, 36px); display: flex; flex-direction: column; gap: 12px; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .6s cubic-bezier(.22, .61, .36, 1), transform .6s cubic-bezier(.22, .61, .36, 1); }
 .floating-contact.is-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
@@ -501,7 +500,7 @@ h1 em { color: #8a9b55; font-style: normal; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .loading-screen, .loading-dumbbell-progress { transition: none; }
+  .loading-screen, .loading-handle-fill { transition: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .hero-fade { opacity: 1; transform: none; animation: none; }
   .floating-contact { opacity: 1; transform: none; transition: none; }
