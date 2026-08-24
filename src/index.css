@@ -400,7 +400,7 @@ h1 em { color: #8a9b55; font-style: normal; }
   .feature-icon { width: 22px; }
   .scroll-prompt { bottom: 23px; left: 50%; }
   .scroll-circle { width: 45px; height: 45px; }
-  .hero-next { width: 41px; height: 41px; right: 16px; }
+  .hero-next { width: 41px; height: 41px; right: 16px; top: 57%; }
   .about-section { padding: 60px 22px 50px; }
   .about-intro { flex-direction: column; align-items: flex-start; gap: 20px; }
   .about-description { max-width: none; }
