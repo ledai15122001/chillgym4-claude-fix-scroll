@@ -320,12 +320,10 @@ function App() {
               <span>1278 đánh giá</span>
             </div>
             <h1 className="hero-fade hero-fade-2">
-              TẬP LUYỆN
-              <br />
-              THEO CÁCH
-              <br />
-              <em>CỦA BẠN.</em>
-            </h1>
+  TẬP BAO <em>CHILL</em>,
+  <br />
+  KẾT QUẢ BAO <em>REAL</em>.
+</h1>
             <p className="hero-fade hero-fade-3 hero-description">
               Không gian hiện đại, thoáng mát với cây xanh, thiết bị cao cấp và cộng đồng năng lượng tích cực.
               Chill nhưng không chill với mục tiêu của bạn.
