@@ -106,10 +106,17 @@ function App() {
   const [heroSlide, setHeroSlide] = useState(0);
   const [aboutSlide, setAboutSlide] = useState(0);
   const [aboutSlidesToShow, setAboutSlidesToShow] = useState(getSlidesToShow);
+  const [aboutMobileTranslate, setAboutMobileTranslate] = useState(0);
   const [navState, setNavState] = useState<'hero' | 'visible' | 'hidden'>('hero');
   const lastScrollY = useRef(0);
   const isNavScrolling = useRef(false);
   const navScrollSettleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const aboutIntroRef = useReveal<HTMLDivElement>();
+  const aboutCarouselRef = useReveal<HTMLDivElement>();
+  const aboutTrackRef = useRef<HTMLDivElement | null>(null);
+  const transformIntroRef = useReveal<HTMLDivElement>();
+  const femaleCaseRef = useReveal<HTMLDivElement>();
+  const maleCaseRef = useReveal<HTMLDivElement>();
 
   const femaleCarousel = useDragCarousel(femaleImages.length - 1);
   const maleCarousel = useDragCarousel(maleImages.length - 1);
@@ -135,9 +142,35 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const maxSlide = aboutImages.length - aboutSlidesToShow;
+    const maxSlide = Math.max(0, Math.ceil(aboutImages.length - aboutSlidesToShow));
     setAboutSlide((current) => Math.min(current, maxSlide));
   }, [aboutSlidesToShow]);
+
+  useEffect(() => {
+    if (aboutSlidesToShow % 1 === 0) {
+      setAboutMobileTranslate(0);
+      return;
+    }
+
+    const viewport = aboutCarouselRef.current;
+    const track = aboutTrackRef.current;
+    if (!viewport || !track) return;
+
+    const updateTranslate = () => {
+      const firstImage = track.querySelector<HTMLElement>('.about-image');
+      if (!firstImage) return;
+      const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+      const step = firstImage.getBoundingClientRect().width + gap;
+      const maxTranslate = Math.max(0, track.scrollWidth - viewport.clientWidth);
+      setAboutMobileTranslate(Math.min(aboutSlide * step, maxTranslate));
+    };
+
+    updateTranslate();
+    const observer = new ResizeObserver(updateTranslate);
+    observer.observe(viewport);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [aboutSlide, aboutSlidesToShow]);
 
   useEffect(() => {
     let ticking = false;
@@ -178,7 +211,7 @@ function App() {
     };
   }, []);
 
-  const maxAboutSlide = Math.max(0, Math.floor(aboutImages.length - aboutSlidesToShow));
+  const maxAboutSlide = Math.max(0, Math.ceil(aboutImages.length - aboutSlidesToShow));
 
   const goToNextHeroSlide = () => setHeroSlide((prev) => (prev + 1) % slideshowImages.length);
   const goToNextAboutSlide = () => setAboutSlide((prev) => Math.min(prev + 1, maxAboutSlide));
@@ -243,12 +276,6 @@ function App() {
     };
     navScrollSettleTimer.current = setTimeout(checkSettled, 100);
   };
-
-  const aboutIntroRef = useReveal<HTMLDivElement>();
-  const aboutCarouselRef = useReveal<HTMLDivElement>();
-  const transformIntroRef = useReveal<HTMLDivElement>();
-  const femaleCaseRef = useReveal<HTMLDivElement>();
-  const maleCaseRef = useReveal<HTMLDivElement>();
 
   return (
     <>
@@ -319,11 +346,10 @@ function App() {
               <span>·</span>
               <span>1278 đánh giá</span>
             </div>
-            <h1 className="hero-fade hero-fade-2">
-  TẬP BAO <em>CHILL</em>,
-  <br />
-  KẾT QUẢ BAO <em>REAL</em>.
-</h1>
+            <h1 className="hero-fade hero-fade-2 hero-heading">
+              <span className="hero-heading-line">TẬP BAO <em>CHILL</em>,</span>
+              <span className="hero-heading-line">KẾT QUẢ BAO <em>REAL</em>.</span>
+            </h1>
             <p className="hero-fade hero-fade-3 hero-description">
               Không gian hiện đại, thoáng mát với cây xanh, thiết bị cao cấp và cộng đồng năng lượng tích cực.
               Chill nhưng không chill với mục tiêu của bạn.
@@ -391,7 +417,12 @@ function App() {
         >
           <div
             className="about-track"
-            style={{ transform: `translateX(calc(-${aboutSlide} * ((100% + var(--about-gap)) / var(--about-slides))))` }}
+            ref={aboutTrackRef}
+            style={{
+              transform: aboutSlidesToShow % 1 === 0
+                ? `translateX(calc(-${aboutSlide} * ((100% + var(--about-gap)) / var(--about-slides))))`
+                : `translateX(-${aboutMobileTranslate}px)`,
+            }}
           >
             {aboutImages.map((src, index) => (
               <figure className="about-image" key={src}>
